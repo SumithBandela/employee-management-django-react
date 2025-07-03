@@ -23,7 +23,7 @@ class EmployeeView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 class EmployeeDetail(APIView):
-    def get_object(self,pk):
+    def get_object(self,pk): 
         try:
             return Employee.objects.get(pk=pk)
         except:
