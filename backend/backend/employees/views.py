@@ -7,9 +7,11 @@ from rest_framework import status
 from django.http import Http404
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class EmployeeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         employees = Employee.objects.all()
         serializer = EmployeeSerializer(employees,many=True)
@@ -23,6 +25,7 @@ class EmployeeView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
 class EmployeeDetail(APIView):
+    permission_classes = [IsAuthenticated]
     def get_object(self,pk): 
         try:
             return Employee.objects.get(pk=pk)
