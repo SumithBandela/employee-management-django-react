@@ -46,9 +46,9 @@ export function Login(){
                     <dd className="text-danger">{formik.errors.password}</dd>
                 </dl>
                 <button className="btn btn-primary w-100" type="submit">Login</button>
-                <div className="text-center m-2">
+                {/*<div className="text-center m-2">
                     <span>Don't have an account? <Link to='/signup' className="text-primary">Sign up</Link></span>
-                </div>
+                </div>*/}
             </form>
               
         </div>

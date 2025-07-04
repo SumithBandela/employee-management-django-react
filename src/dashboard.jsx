@@ -1,64 +1,127 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-export function Dashboard(){
-    const[employees,setEmployee] = useState([])
-    const accessToken = localStorage.getItem('access');
-    let navigate = useNavigate()
-    useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/employees', {
-  headers: {
-    Authorization: `Bearer ${accessToken}`
-  }
-  })
-        .then(response=>{
-            setEmployee(response.data)
-        })
-    },[accessToken])
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+export function Dashboard() {
+    const [employees, setEmployees] = useState([]);
+    const [expandedRow, setExpandedRow] = useState(null);
+    const accessToken = localStorage.getItem("access");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios
+            .get("http://127.0.0.1:8000/api/employees", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((response) => {
+                setEmployees(response.data);
+            });
+    }, [accessToken]);
+
+    function toggleDetails(id) {
+        setExpandedRow(expandedRow === id ? null : id);
+    }
 
     function logout() {
-        localStorage.removeItem('access');
-        localStorage.removeItem('refresh');
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
         window.location.href = "/login";
     }
 
-        return(
-            <div className="container m-5 p-3">
-                <h2 className="text-center mb-2 text-success">All Employees</h2>
-                <table className="table table-bordered mt-2">
-                    <thead>
-                        <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Designation</th>
-                            <th>Salary</th>
-                            <th>Joined Date</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            employees.map(employee=>
-                                <tr key={employee.id}>
-                                    <td>{employee.firstname}</td>
-                                    <td>{employee.lastname}</td>
-                                    <td>{employee.email}</td>
-                                    <td>{employee.phone}</td>
-                                    <td>{employee.designation}</td>
-                                    <td>{employee.salary}</td>
-                                    <td>{employee.joined_date}</td>
-                                    <td onClick={()=>{navigate(`edit/${employee.id}`)}} className="text-primary btn">Edit</td>
-                                    <td onClick={()=>{navigate(`delete/${employee.id}`)}} className="text-primary">Delete</td>
-                                </tr>
-                            )
-                        }
-                        <button className="btn btn-primary mt-3" onClick={()=>navigate(`add`)}>Add Employee</button>
-                        <button onClick={logout} className="ms-2 btn btn-danger mt-3">logout</button>
-                    </tbody>
-                </table>
+    return (
+        <div className="container mt-5">
+            <h2 className="text-center text-success mb-4">Employee Dashboard</h2>
+
+            <div className="d-flex justify-content-end mb-3">
+                <button
+                    className="btn btn-primary me-2"
+                    onClick={() => navigate("add")}
+                >
+                    Add Employee
+                </button>
+                <button className="btn btn-danger" onClick={logout}>
+                    Logout
+                </button>
             </div>
-        )
+
+            {employees.length === 0 ? (
+                <p className="text-center">No employees found.</p>
+            ) : (
+                employees.map((employee) => (
+                    <div key={employee.id} className="card mb-3 shadow-sm">
+                        <div className="card-body d-flex align-items-center">
+                            {/* Employee Photo */}
+                            <img
+                                src={
+                                    employee.photo
+                                        ? `http://127.0.0.1:8000${employee.photo}`
+                                        : "https://via.placeholder.com/80"
+                                }
+                                alt="Employee"
+                                className="img-thumbnail me-3"
+                                style={{
+                                    width: "80px",
+                                    height: "80px",
+                                    objectFit: "cover",
+                                    borderRadius: "50%",
+                                }}
+                            />
+
+                            {/* Basic Info */}
+                            <div className="flex-grow-1">
+                                <h5 className="mb-1">
+                                    {employee.firstname} {employee.lastname}
+                                </h5>
+                                <p className="mb-0 text-muted">{employee.email}</p>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div>
+                                <button
+                                    className="btn btn-info btn-sm me-2"
+                                    onClick={() => toggleDetails(employee.id)}
+                                >
+                                    {expandedRow === employee.id ? "Hide" : "View"}
+                                </button>
+                                <button
+                                    className="btn btn-outline-primary btn-sm me-2"
+                                    onClick={() => navigate(`edit/${employee.id}`)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="btn btn-outline-danger btn-sm"
+                                    onClick={() => navigate(`delete/${employee.id}`)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Expandable Details */}
+                        {expandedRow === employee.id && (
+                            <div className="card-footer bg-light">
+                                <div className="row">
+                                    <div className="col-md-4">
+                                        <strong>Phone:</strong> {employee.phone}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <strong>Designation:</strong> {employee.designation}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <strong>Salary:</strong> ₹{employee.salary}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <strong>Joined Date:</strong> {employee.joined_date}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))
+            )}
+        </div>
+    );
 }
