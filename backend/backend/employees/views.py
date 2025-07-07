@@ -8,13 +8,16 @@ from django.http import Http404
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 class EmployeeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        employees = Employee.objects.all()
-        serializer = EmployeeSerializer(employees,many=True)
+        employees = Employee.objects.all().order_by('-id')
+        paginator = PageNumberPagination()
+        result_page = paginator.paginate_queryset(employees,request)
+        serializer = EmployeeSerializer(result_page,many=True)
         return Response(serializer.data)
     
     def post(self,request):
