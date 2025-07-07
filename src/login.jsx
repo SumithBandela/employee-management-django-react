@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useFormik } from "formik"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import * as yup from "yup"
 export function Login(){
    const navigate = useNavigate()
@@ -45,7 +45,7 @@ export function Login(){
                     <dd><input type="password" name='password' id='password' className="form-control" onChange={formik.handleChange}/></dd>
                     <dd className="text-danger">{formik.errors.password}</dd>
                 </dl>
-                <button className="btn btn-primary w-100" type="submit">Login</button>
+                <button className="btn btn-primary w-100" type="submit" disabled={formik.isSubmitting}>{formik.isSubmitting?'Logging in...':'Login'}</button>
                 {/*<div className="text-center m-2">
                     <span>Don't have an account? <Link to='/signup' className="text-primary">Sign up</Link></span>
                 </div>*/}

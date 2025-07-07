@@ -8,22 +8,28 @@ from django.http import Http404
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.pagination import PageNumberPagination
+from django.core.mail import send_mail
 # Create your views here.
 
 class EmployeeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
         employees = Employee.objects.all().order_by('-id')
-        paginator = PageNumberPagination()
-        result_page = paginator.paginate_queryset(employees,request)
-        serializer = EmployeeSerializer(result_page,many=True)
+        serializer = EmployeeSerializer(employees,many=True)
         return Response(serializer.data)
     
     def post(self,request):
         serializer = EmployeeSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.save()
+            employee = serializer.save()
+            send_mail(
+                subject = 'New Employee Added',
+                message = f'{employee.firstname}\n{employee.lastname}',
+                from_email= 'sumithbandela@gmail.com',
+                recipient_list= ['bsumith209@gmail.com'],
+                fail_silently= False
+
+            )
             return Response({"message":"employee created"},status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
@@ -74,3 +80,4 @@ class LoginView(APIView):
                 "refresh":str(refresh)
             },status=status.HTTP_200_OK)
         return Response({"error":"Invalid username or password"},status=status.HTTP_401_UNAUTHORIZED)
+    

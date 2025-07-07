@@ -25,9 +25,9 @@ export function AddEmployee() {
       designation: yup.string().required('Designation is required'),
       joined_date: yup.date().required('Joining date is required'),
     }),onSubmit: async (formData, { setSubmitting, resetForm }) => {
-  setSubmitting(true); // ✅ Start submitting
+  setSubmitting(true); 
   try {
-    // ✅ If no photo is selected
+    
     if (!formData.photo) {
       alert("Please select a photo.");
       setSubmitting(false);
@@ -41,13 +41,13 @@ export function AddEmployee() {
 
         const payload = {
           ...formData,
-          photo: base64Image, // ✅ base64 encoded image
+          photo: base64Image, 
         };
 
         const response = await axios.post('http://127.0.0.1:8000/api/employees/', payload, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem("access")}`, // ✅ safer fetch
+            Authorization: `Bearer ${localStorage.getItem("access")}`, 
           },
         });
 
