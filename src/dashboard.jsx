@@ -36,11 +36,15 @@ export function Dashboard() {
 
             <div className="d-flex justify-content-end mb-3">
                 <button
-                    className="btn btn-primary me-2"
+                    className="btn btn-primary"
                     onClick={() => navigate("add")}
                 >
                     Add Employee
                 </button>
+                <button className='btn btn-secondary mx-2' onClick={()=>navigate('password-change')}>
+                    Change Password
+                </button>
+
                 <button className="btn btn-danger" onClick={logout}>
                     Logout
                 </button>

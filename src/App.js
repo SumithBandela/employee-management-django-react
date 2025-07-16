@@ -6,6 +6,9 @@ import { EditEmployee } from './editemployee';
 import { DeleteEmployee } from './deleteemployee';
 import { Signup } from './signup';
 import { PrivateRoute } from './privateroute';
+import { PasswordChange } from './passwordchange';
+import { ForgotPassword } from './forgot-password';
+
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +16,7 @@ function App() {
       <Route path='/' element={<Login />} />
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />
+      <Route path='forgot-password' element={<ForgotPassword/>}/>
 
       <Route path='dashboard' element={
         <PrivateRoute><Dashboard /></PrivateRoute>
@@ -29,6 +33,11 @@ function App() {
       <Route path='dashboard/delete/:id' element={
         <PrivateRoute><DeleteEmployee /></PrivateRoute>
       } />
+
+      <Route path='dashboard/password-change' element={
+        <PrivateRoute><PasswordChange/></PrivateRoute>
+      }/>
+
     </Routes>
     </BrowserRouter>
   );
