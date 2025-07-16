@@ -31,9 +31,28 @@ class Base64ImageField(serializers.ImageField):
                 raise serializers.ValidationError("Invalid image data")
         return super().to_internal_value(data)
 
+class Base64FileField(serializers.FileField):
+    def to_internal_value(self, data):
+      if isinstance(data,str) and data.startswith('data:'):
+          try:
+              format,filedata = data.split(';base64,')
+              ext = format.split('/')[-1]
+              filename = str(uuid.uuid4())[:10]
+              file_content = base64.b64decode(filedata)
 
+              data = ContentFile(file_content,name=f'{filename}.{ext}')
+          except Exception as e:
+              raise serializers.ValidationError('Invalid file data')
+          
+      return super().to_internal_value(data)
+
+
+    
 class EmployeeSerializer(serializers.ModelSerializer):
     photo = Base64ImageField()
+    
+    resume = Base64FileField()
+
     class Meta:
         model = Employee
         fields = [
@@ -45,6 +64,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "salary",
             "designation",
             "photo",
+            "resume",
             "joined_date",
             "created_at",
             "updated_at"
