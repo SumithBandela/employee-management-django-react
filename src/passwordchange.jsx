@@ -45,7 +45,9 @@ export function PasswordChange() {
 
           {/* Action Buttons */}
           <button type="submit" className="btn btn-primary w-100 py-2 mb-3">Update</button>
-          <Link to="/dashboard" className="btn btn-success w-100 py-2">Back to Dashboard</Link>
+         <div className="text-center">
+             <Link to="/dashboard" className=" py-2">Back to Dashboard</Link>
+         </div>
         </form>
       </div>
     </div>

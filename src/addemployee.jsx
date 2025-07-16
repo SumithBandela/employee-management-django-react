@@ -73,132 +73,153 @@ export function AddEmployee() {
   });
 
   return (
-    <div className="d-flex justify-content-center align-items-center mt-5 container">
-      <form className="m-2 p-4 w-50 border border-2" onSubmit={formik.handleSubmit} encType="multipart/form-data">
-        <h2>Add Employee</h2>
-        <dl>
-          <dt>Firstname</dt>
-          <dd>
-            <input
-              type="text"
-              name="firstname"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.firstname}
-            />
-            {formik.touched.firstname && formik.errors.firstname && (
-              <div className="text-danger">{formik.errors.firstname}</div>
-            )}
-          </dd>
+     <div className="d-flex justify-content-center align-items-center mt-5" style={{ minHeight: "100vh" }}>
+      <form
+        className="w-50 w-md-75 w-lg-50 border border-2 p-4 bg-white shadow-lg rounded"
+        onSubmit={formik.handleSubmit}
+        encType="multipart/form-data"
+      >
+        <h2 className="text-center text-primary mb-4">Add Employee</h2>
 
-          <dt>Lastname</dt>
-          <dd>
-            <input
-              type="text"
-              name="lastname"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.lastname}
-            />
-            {formik.touched.lastname && formik.errors.lastname && (
-              <div className="text-danger">{formik.errors.lastname}</div>
-            )}
-          </dd>
+        {/* First Name */}
+        <div className="mb-3">
+          <label htmlFor="firstname" className="form-label">Firstname</label>
+          <input
+            type="text"
+            name="firstname"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.firstname}
+            id="firstname"
+          />
+          {formik.touched.firstname && formik.errors.firstname && (
+            <div className="text-danger">{formik.errors.firstname}</div>
+          )}
+        </div>
 
-          <dt>Email</dt>
-          <dd>
-            <input
-              type="text"
-              name="email"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <div className="text-danger">{formik.errors.email}</div>
-            )}
-          </dd>
+        {/* Last Name */}
+        <div className="mb-3">
+          <label htmlFor="lastname" className="form-label">Lastname</label>
+          <input
+            type="text"
+            name="lastname"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.lastname}
+            id="lastname"
+          />
+          {formik.touched.lastname && formik.errors.lastname && (
+            <div className="text-danger">{formik.errors.lastname}</div>
+          )}
+        </div>
 
-          <dt>Phone</dt>
-          <dd>
-            <input
-              type="text"
-              name="phone"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.phone}
-            />
-            {formik.touched.phone && formik.errors.phone && (
-              <div className="text-danger">{formik.errors.phone}</div>
-            )}
-          </dd>
+        {/* Email */}
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="text"
+            name="email"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            id="email"
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div className="text-danger">{formik.errors.email}</div>
+          )}
+        </div>
 
-          <dt>Salary</dt>
-          <dd>
-            <input
-              type="text"
-              name="salary"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.salary}
-            />
-            {formik.touched.salary && formik.errors.salary && (
-              <div className="text-danger">{formik.errors.salary}</div>
-            )}
-          </dd>
+        {/* Phone */}
+        <div className="mb-3">
+          <label htmlFor="phone" className="form-label">Phone</label>
+          <input
+            type="text"
+            name="phone"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.phone}
+            id="phone"
+          />
+          {formik.touched.phone && formik.errors.phone && (
+            <div className="text-danger">{formik.errors.phone}</div>
+          )}
+        </div>
 
-          <dt>Designation</dt>
-          <dd>
-            <select
-              name="designation"
-              className="form-select"
-              onChange={formik.handleChange}
-              value={formik.values.designation}
-            >
-              <option value="">Select Designation</option>
-              <option value="Python Developer">Python Developer</option>
-              <option value="Java Developer">Java Developer</option>
-              <option value="Php Developer">Php Developer</option>
-              <option value="React Js Developer">React Js Developer</option>
-            </select>
-            {formik.touched.designation && formik.errors.designation && (
-              <div className="text-danger">{formik.errors.designation}</div>
-            )}
-          </dd>
+        {/* Salary */}
+        <div className="mb-3">
+          <label htmlFor="salary" className="form-label">Salary</label>
+          <input
+            type="text"
+            name="salary"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.salary}
+            id="salary"
+          />
+          {formik.touched.salary && formik.errors.salary && (
+            <div className="text-danger">{formik.errors.salary}</div>
+          )}
+        </div>
 
-          <dt>Joined Date</dt>
-          <dd>
-            <input
-              type="date"
-              name="joined_date"
-              className="form-control"
-              onChange={formik.handleChange}
-              value={formik.values.joined_date}
-            />
-            {formik.touched.joined_date && formik.errors.joined_date && (
-              <div className="text-danger">{formik.errors.joined_date}</div>
-            )}
-          </dd>
+        {/* Designation */}
+        <div className="mb-3">
+          <label htmlFor="designation" className="form-label">Designation</label>
+          <select
+            name="designation"
+            className="form-select"
+            onChange={formik.handleChange}
+            value={formik.values.designation}
+            id="designation"
+          >
+            <option value="">Select Designation</option>
+            <option value="Python Developer">Python Developer</option>
+            <option value="Java Developer">Java Developer</option>
+            <option value="Php Developer">Php Developer</option>
+            <option value="React Js Developer">React Js Developer</option>
+          </select>
+          {formik.touched.designation && formik.errors.designation && (
+            <div className="text-danger">{formik.errors.designation}</div>
+          )}
+        </div>
 
-          <dt>Photo</dt>
-          <dd>
-            <input
-              type="file"
-              name="photo"
-              accept="image/*"
-              className="form-control"
-              onChange={(event) => {
-                formik.setFieldValue("photo", event.currentTarget.files[0]);
-              }}
-            />
-          </dd>
-        </dl>
+        {/* Joined Date */}
+        <div className="mb-3">
+          <label htmlFor="joined_date" className="form-label">Joined Date</label>
+          <input
+            type="date"
+            name="joined_date"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.joined_date}
+            id="joined_date"
+          />
+          {formik.touched.joined_date && formik.errors.joined_date && (
+            <div className="text-danger">{formik.errors.joined_date}</div>
+          )}
+        </div>
 
-        <button className="btn btn-primary" type="submit" disabled={formik.isSubmitting}>
-          {formik.isSubmitting ? "Adding Employee..." : "Add Employee"}
-        </button>
+        {/* Photo */}
+        <div className="mb-3">
+          <label htmlFor="photo" className="form-label">Photo</label>
+          <input
+            type="file"
+            name="photo"
+            accept="image/*"
+            className="form-control"
+            onChange={(event) => formik.setFieldValue("photo", event.currentTarget.files[0])}
+            id="photo"
+          />
+        </div>
 
-        <Link to='/dashboard' className="btn btn-success ms-3">Back to Dashboard</Link>
+        {/* Submit Button */}
+        <div className="d-flex justify-content-between mt-4">
+          <button className="btn btn-primary" type="submit" disabled={formik.isSubmitting}>
+            {formik.isSubmitting ? "Adding Employee..." : "Add Employee"}
+          </button>
+          <Link to="/dashboard" className="btn btn-success ms-3">
+            Back to Dashboard
+          </Link>
+        </div>
       </form>
     </div>
   );
