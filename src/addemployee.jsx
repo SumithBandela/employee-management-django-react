@@ -62,7 +62,7 @@ export function AddEmployee() {
       }
     };
 
-    reader.readAsDataURL(formData.photo); // ✅ Start reading image as base64
+    reader.readAsDataURL(formData.photo); 
 
   } catch (outerError) {
     console.error('Unexpected error:', outerError);
