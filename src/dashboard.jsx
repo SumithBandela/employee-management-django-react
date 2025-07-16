@@ -11,25 +11,27 @@ export function Dashboard() {
     const [expandedRow, setExpandedRow] = useState(null);
     const accessToken = localStorage.getItem("access");
     const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState("");
 
-    const fetchEmployees = (page = 1) => {
-        axios
-            .get(`http://127.0.0.1:8000/api/employees/?page=${page}`, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-            .then((response) => {
-                setEmployees(response.data.results);
-                setNextPage(response.data.next);
-                setPrevPage(response.data.previous);
-                setCount(response.data.count);
-                setCurrentPage(page);
-            })
-            .catch((error) => {
-                console.error("Error fetching employees:", error);
-            });
+    const fetchEmployees = (page = 1, search = searchQuery) => {
+    axios
+        .get(`http://127.0.0.1:8000/api/employees/?page=${page}&search=${search}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        .then((response) => {
+            setEmployees(response.data.results);
+            setNextPage(response.data.next);
+            setPrevPage(response.data.previous);
+            setCount(response.data.count);
+            setCurrentPage(page);
+        })
+        .catch((error) => {
+            console.error("Error fetching employees:", error);
+        });
     };
+  
 
     useEffect(() => {
         fetchEmployees();
@@ -59,6 +61,19 @@ export function Dashboard() {
                 <button className="btn btn-danger" onClick={logout}>
                     Logout
                 </button>
+            </div>
+            <div className="mb-3">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by name, email or designation"
+                    value={searchQuery}
+                    onChange={(e) => {
+                        const query = e.target.value;
+                        setSearchQuery(query);
+                        fetchEmployees(1, query); // Reset to page 1 with search
+                    }}
+                />
             </div>
 
             {employees.length === 0 ? (

@@ -10,16 +10,29 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 # Create your views here.
 
 class EmployeeView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self,request):
-        employees = Employee.objects.all().order_by('-id')
+    def get(self, request):
+        search_query = request.GET.get('search', '')  # get search from query param
+
+        # Filter using icontains on multiple fields
+        employees = Employee.objects.filter(
+            Q(firstname__icontains=search_query) |
+            Q(lastname__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(designation__icontains=search_query)
+        ).order_by('-id')
+
+        # Pagination
         paginator = PageNumberPagination()
         paginator.page_size = 5
-        result_page = paginator.paginate_queryset(employees,request)
-        serializer = EmployeeSerializer(result_page,many=True)
+        result_page = paginator.paginate_queryset(employees, request)
+
+        # Serialize paginated data
+        serializer = EmployeeSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
     
     def post(self,request):
