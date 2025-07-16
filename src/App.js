@@ -8,6 +8,8 @@ import { Signup } from './signup';
 import { PrivateRoute } from './privateroute';
 import { PasswordChange } from './passwordchange';
 import { ForgotPassword } from './forgot-password';
+import { VerifyOTP } from './verifyotp';
+import { ResetPassword } from './resetpassword';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />
       <Route path='forgot-password' element={<ForgotPassword/>}/>
+      <Route path='verify-otp' element={<VerifyOTP/>}/>
+      <Route path='reset-password' element={<ResetPassword/>}/>
 
       <Route path='dashboard' element={
         <PrivateRoute><Dashboard /></PrivateRoute>
