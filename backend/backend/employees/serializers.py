@@ -50,3 +50,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
             "updated_at"
         ]
         read_only_fields = ["created_at", "updated_at"]
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password  = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True,min_length=6)
