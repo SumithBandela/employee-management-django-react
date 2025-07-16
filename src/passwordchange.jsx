@@ -21,7 +21,7 @@ export function PasswordChange() {
         .required("Please confirm your new password")
     }),
     onSubmit: (values, { resetForm, setSubmitting }) => {
-      axios.post("http://127.0.0.1:8000/change-password/", {
+      axios.post("http://127.0.0.1:8000/api/change-password/", {
         old_password: values.old_password,
         new_password: values.new_password
       }, {
