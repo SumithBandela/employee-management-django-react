@@ -75,7 +75,7 @@ export function DeleteEmployee() {
         </dl>
 
         <button className="btn btn-danger w-25" type="submit">Yes</button>
-        <Link to='/dashboard' className="btn btn-success ms-3 w-25">No</Link>
+        <Link to='/dashboard/employee-dashboard' className="btn btn-success ms-3 w-25">No</Link>
       </form>
     </div>
   );

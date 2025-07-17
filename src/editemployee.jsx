@@ -222,7 +222,7 @@ export function EditEmployee() {
           <button className="btn btn-primary" type="submit" disabled={formik.isSubmitting}>
             {formik.isSubmitting ? "Updating..." : "Update"}
           </button>
-          <Link to="/dashboard" className="btn btn-success ms-3">
+          <Link to="/dashboard/employee-dashboard" className="btn btn-success ms-3">
             Back to Dashboard
           </Link>
         </div>

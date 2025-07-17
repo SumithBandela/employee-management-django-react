@@ -13,9 +13,25 @@ from django.core.mail import send_mail
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 from .models import passwordResetOtp
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 import random
+import csv
+from .utils import send_welcome_mail
+import os
+from django.utils.timezone import now
 # Create your views here.
+class DashboardApiView(APIView):
+    def get(self,request):
+        today = now().date()
 
+        data = {
+            "total_users":User.objects.count(),
+            "new_signups_today":User.objects.filter(date_joined__date=today).count(),
+            "total_employees":Employee.objects.count()
+        }
+        return Response(data)
 class EmployeeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -42,14 +58,8 @@ class EmployeeView(APIView):
         serializer = EmployeeSerializer(data = request.data)
         if serializer.is_valid():
             employee = serializer.save()
-            send_mail(
-                subject = 'New Employee Added',
-                message = f'{employee.firstname}\n{employee.lastname}',
-                from_email= 'sumithbandela@gmail.com',
-                recipient_list= ['bsumith209@gmail.com'],
-                fail_silently= False
-
-            )
+            file_path = os.path.join('media/uploads/files','1744360808.pdf')
+            send_welcome_mail(employee.firstname,'bsumith209@gmail.com',file_path)
             return Response({"message":"employee created"},status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
@@ -193,3 +203,53 @@ class ResetPasswordView(APIView):
                 return Response({'error': 'Invalid email or OTP'}, status=400)
 
         return Response(serializer.errors, status=400)
+    
+class ExportEmployeeCSV(APIView):
+    def get(self,request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename = "employees.csv"'
+        writer = csv.writer(response)
+        writer.writerow([
+            'First Name', 'Last Name', 'Email', 'Phone',
+            'Salary', 'Designation', 'Joined Date'
+        ])
+
+        employees = Employee.objects.all()
+        for emp in employees:
+            writer.writerow([
+                emp.firstname,
+                emp.lastname,
+                emp.email,
+                emp.phone,
+                emp.salary,
+                emp.designation,
+                emp.joined_date
+            ])
+        return response
+    
+class ExportEmployeePDF(APIView):
+   # permission_classes = [IsAuthenticated]
+
+    def get(self,request):
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition']  = "attachment; filename = 'employees.pdf'"
+
+        p = canvas.Canvas(response,pagesize=A4)
+        width, height= A4
+
+        p.setFont("Helvetica-Bold", 14)
+        p.drawString(50,height-50,"Employee List")
+        p.setFont("Helvetica", 11)
+        y = height - 80
+
+        employees = Employee.objects.all()
+        for emp in employees:
+            line = f"{emp.firstname} {emp.lastname} | {emp.email} | {emp.designation} | {emp.salary} | Joined: {emp.joined_date}"
+            p.drawString(50, y, line)
+            y -= 20
+            if y < 50:
+                p.showPage()
+                y = height - 50
+
+        p.save()
+        return response

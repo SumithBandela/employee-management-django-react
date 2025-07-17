@@ -14,7 +14,8 @@ export function AddEmployee() {
       salary: '',
       designation: '',
       joined_date: '',
-      photo: null   
+      photo: null,
+      resume:null
     },
     validationSchema: yup.object({
       firstname: yup.string().required('Firstname is required'),
@@ -24,51 +25,55 @@ export function AddEmployee() {
       salary: yup.string().required('Salary is required'),
       designation: yup.string().required('Designation is required'),
       joined_date: yup.date().required('Joining date is required'),
+      resume: yup.mixed().required('Resume is required'),
     }),onSubmit: async (formData, { setSubmitting, resetForm }) => {
-  setSubmitting(true); 
+  setSubmitting(true);
+
+  if (!formData.photo || !formData.resume) {
+    alert("Please select both photo and resume.");
+    setSubmitting(false);
+    return;
+  }
+
   try {
-    
-    if (!formData.photo) {
-      alert("Please select a photo.");
-      setSubmitting(false);
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      try {
-        const base64Image = reader.result;
-
-        const payload = {
-          ...formData,
-          photo: base64Image, 
-        };
-
-        const response = await axios.post('http://127.0.0.1:8000/api/employees/', payload, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem("access")}`, 
-          },
-        });
-
-        console.log('Employee added:', response.data);
-        navigate('/dashboard');
-        resetForm();
-        
-      } catch (error) {
-        console.error('Error adding employee:', error.response?.data || error.message);
-      } finally {
-        setSubmitting(false);
-      }
+    const readFileAsBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
     };
 
-    reader.readAsDataURL(formData.photo); 
+    const [base64Photo, base64Resume] = await Promise.all([
+      readFileAsBase64(formData.photo),
+      readFileAsBase64(formData.resume),
+    ]);
 
-  } catch (outerError) {
-    console.error('Unexpected error:', outerError);
+    const payload = {
+      ...formData,
+      photo: base64Photo,
+      resume: base64Resume,
+    };
+
+    const response = await axios.post('http://127.0.0.1:8000/api/employees/', payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("access")}`,
+      },
+    });
+
+    console.log('Employee added:', response.data);
+    navigate('/dashboard');
+    resetForm();
+
+  } catch (error) {
+    console.error('Error adding employee:', error.response?.data || error.message);
+  } finally {
     setSubmitting(false);
   }
 }
+
 
   });
 
@@ -211,12 +216,29 @@ export function AddEmployee() {
           />
         </div>
 
+        {/* Resume */}
+        <div className="mb-3">
+          <label htmlFor="resume" className="form-label">Resume (PDF/DOC)</label>
+          <input
+            type="file"
+            name="resume"
+            accept=".pdf,.doc,.docx"
+            className="form-control"
+            onChange={(event) => formik.setFieldValue("resume", event.currentTarget.files[0])}
+            id="resume"
+          />
+          {formik.touched.resume && formik.errors.resume && (
+            <div className="text-danger">{formik.errors.resume}</div>
+          )}
+        </div>
+
+
         {/* Submit Button */}
         <div className="d-flex justify-content-between mt-4">
           <button className="btn btn-primary" type="submit" disabled={formik.isSubmitting}>
             {formik.isSubmitting ? "Adding Employee..." : "Add Employee"}
           </button>
-          <Link to="/dashboard" className="btn btn-success ms-3">
+          <Link to="/dashboard/employee-dashboard" className="btn btn-success ms-3">
             Back to Dashboard
           </Link>
         </div>
