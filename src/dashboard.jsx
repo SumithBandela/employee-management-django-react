@@ -28,7 +28,7 @@ export function Dashboard()
          <div className="container mt-5">
                 <h2 className="text-center mb-4">📊 Dashboard</h2>
                 <div className="d-flex justify-content-end mb-4">
-                    <Link to="employee-dashboard" className="btn btn-primary">
+                    <Link to="employee-dashboard" className="btn btn-outline-primary">
                     Go to Employee Dashboard
                     </Link>
                     <Link to="password-change" className="btn btn-outline-secondary mx-2">

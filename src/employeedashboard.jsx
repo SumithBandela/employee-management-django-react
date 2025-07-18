@@ -85,7 +85,7 @@ export function EmployeeDashboard() {
             <h2 className="text-center text-success mb-4">Employee Dashboard</h2>
 
             <div className="d-flex justify-content-end mb-3">
-                <button className="btn btn-primary" onClick={() => navigate("add")}>
+                <button className="btn btn-outline-primary" onClick={() => navigate("add")}>
                     Add Employee
                 </button>
                 <button className="btn btn-outline-success me-2 ms-2" onClick={downloadCSV}>
@@ -94,7 +94,7 @@ export function EmployeeDashboard() {
                 <button className="btn btn-outline-dark" onClick={downloadPDF}>
                     Download PDF
                 </button>
-                <button className="btn btn-outline-primary mx-2" onClick={()=>navigate('/dashboard')}>
+                <button className="btn btn-outline-danger mx-2" onClick={()=>navigate('/dashboard')}>
                     Back to Dashboard
                 </button>
             </div>
