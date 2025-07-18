@@ -35,9 +35,8 @@ class DashboardApiView(APIView):
 class EmployeeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        search_query = request.GET.get('search', '')  # get search from query param
-
-        # Filter using icontains on multiple fields
+        search_query = request.GET.get('search', '')  
+      
         employees = Employee.objects.filter(
             Q(firstname__icontains=search_query) |
             Q(lastname__icontains=search_query) |
@@ -45,12 +44,12 @@ class EmployeeView(APIView):
             Q(designation__icontains=search_query)
         ).order_by('-id')
 
-        # Pagination
+       
         paginator = PageNumberPagination()
         paginator.page_size = 5
         result_page = paginator.paginate_queryset(employees, request)
 
-        # Serialize paginated data
+        
         serializer = EmployeeSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
     
@@ -195,7 +194,6 @@ class ResetPasswordView(APIView):
                 user.set_password(new_password)
                 user.save()
 
-                # Clean up used OTPs
                 passwordResetOtp.objects.filter(user=user).delete()
 
                 return Response({'message': 'Password reset successful'}, status=200)
@@ -228,7 +226,7 @@ class ExportEmployeeCSV(APIView):
         return response
     
 class ExportEmployeePDF(APIView):
-   # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self,request):
         response = HttpResponse(content_type='application/pdf')

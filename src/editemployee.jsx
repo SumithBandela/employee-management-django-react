@@ -57,7 +57,7 @@ export function EditEmployee() {
         });
 
         alert('Employee updated successfully!');
-        navigate('/dashboard')
+        navigate('/dashboard/employee-dashboard')
         
       } catch (error) {
         console.error('Error updating employee:', error.response?.data || error.message);

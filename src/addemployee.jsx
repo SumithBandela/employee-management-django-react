@@ -64,7 +64,7 @@ export function AddEmployee() {
     });
 
     console.log('Employee added:', response.data);
-    navigate('/dashboard');
+    navigate('/dashboard/employee-dashboard');
     resetForm();
 
   } catch (error) {

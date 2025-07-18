@@ -27,7 +27,7 @@ export function DeleteEmployee() {
       }
       });
       alert('Employee deleted successfully!');
-      navigate('/dashboard');
+      navigate('/dashboard/employee-dashboard');
     } catch (error) {
       console.error('Error deleting employee:', error.response?.data || error.message);
     }
